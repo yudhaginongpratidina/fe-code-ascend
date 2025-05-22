@@ -34,8 +34,17 @@ export default function Header() {
                         <HeaderRootLink icon={<FaHome />} href="/dashboard" />
                         <HeaderBredCrumbSlash />
                         <HeaderBredCrumbLink name="My Module" href="/my-module" />
+                    </HeaderBredcrumbContainer>
+                </HeaderContainer>
+            )}
+
+            {pathname === `/my-module/users/${params.moduleId}` && (
+                <HeaderContainer>
+                    <HeaderTitleAndDescription title="Member of Module" />
+                    <HeaderBredcrumbContainer>
+                        <HeaderRootLink icon={<FaHome />} href="/dashboard" />
                         <HeaderBredCrumbSlash />
-                        <HeaderBredCrumbLink name="Chapters" href={`/my-module/${params.moduleId}`} />
+                        <HeaderBredCrumbLink name="My Module" href="/my-module" />
                     </HeaderBredcrumbContainer>
                 </HeaderContainer>
             )}
