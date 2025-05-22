@@ -204,9 +204,7 @@ export default function Page() {
                                             </div>
                                             <span className="text-red-600">Pengalaman terbatas</span>
                                         </div>
-
                                         <FaArrowRight className="hidden rotate-90 text-gray-400 md:block md:rotate-0" size={20} />
-
                                         <div className="flex items-center">
                                             <div className="mr-2 rounded-full bg-green-100 p-2 text-green-500">
                                                 <FaLaptop size={20} />
