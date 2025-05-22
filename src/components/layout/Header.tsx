@@ -51,7 +51,12 @@ export default function Header() {
 
             {pathname === `/user-management` && (
                 <HeaderContainer>
-                    <HeaderTitleAndDescription title="User Management" description="Manage all users and their roles" />
+                    <HeaderTitleAndDescription title="User Management" />
+                    <HeaderBredcrumbContainer>
+                        <HeaderRootLink icon={<FaHome />} href="/dashboard" />
+                        <HeaderBredCrumbSlash />
+                        <HeaderBredCrumbLink name="User Management" href="/user-management" />
+                    </HeaderBredcrumbContainer>
                 </HeaderContainer>
             )}
         </>
