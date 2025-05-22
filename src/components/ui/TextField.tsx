@@ -20,7 +20,8 @@ const TextField = ({ type, name, value, onChange, required = false, disabled = f
     const inputClass =
         `w-full p-2.5 rounded-sm outline-none border border-gray-200 focus:shadow focus:shadow duration-150 ` +
         (isLoading ? "bg-gray-100 cursor-not-allowed" : "") +
-        (isError ? "border-red-600" : "border-gray-200");
+        (isError ? "border-red-600" : "border-gray-200") +
+        (disabled ? "bg-gray-200 cursor-not-allowed" : ""); 
 
     return (
         <div className="w-full relative">

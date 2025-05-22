@@ -9,7 +9,7 @@ type LeaderboardDashboardProps = {
 
 export default function LeaderboardDashboard({ leaderboardData, myexperience, myrank }: LeaderboardDashboardProps) {
     return (
-        <div className="rounded-2xl bg-white p-6 shadow-lg border border-gray-100 h-full">
+        <div className="rounded-sm bg-white p-6 shadow-lg border border-gray-100 h-full">
             <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center gap-2">
                     <FaTrophy className="text-yellow-500 text-xl" />
@@ -24,7 +24,7 @@ export default function LeaderboardDashboard({ leaderboardData, myexperience, my
             </div>
             <div className="space-y-4">
                 {leaderboardData.map((user, index) => (
-                    <div key={user.id} className="flex justify-between items-center p-2 hover:bg-gray-50 rounded-lg transition-colors duration-150">
+                    <div key={user.id} className="flex justify-between items-center p-2 hover:bg-gray-50 rounded-sm transition-colors duration-150">
                         <div className="flex items-center gap-3">
                             <div className="w-8 text-center">
                                 {index === 0 ? <FaCrown className="text-yellow-500 text-xl mx-auto" /> :
@@ -46,7 +46,7 @@ export default function LeaderboardDashboard({ leaderboardData, myexperience, my
                     </div>
                 ))}
                 <div className="border-t border-gray-200 pt-4 mt-4">
-                    <div className="flex justify-between items-center p-2 bg-blue-50 rounded-lg">
+                    <div className="flex justify-between items-center p-2 bg-blue-50 rounded-sm">
                         <div className="flex items-center gap-3">
                             <div className="w-8 text-center">
                                 <span className="font-bold text-blue-800">{myrank}</span>

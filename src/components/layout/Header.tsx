@@ -59,6 +59,17 @@ export default function Header() {
                     </HeaderBredcrumbContainer>
                 </HeaderContainer>
             )}
+
+            {pathname === `/my-profile` && (
+                <HeaderContainer>
+                    <HeaderTitleAndDescription title="My Profile" />
+                    <HeaderBredcrumbContainer>
+                        <HeaderRootLink icon={<FaHome />} href="/dashboard" />
+                        <HeaderBredCrumbSlash />
+                        <HeaderBredCrumbLink name="My Profile" href="/my-profile" />
+                    </HeaderBredcrumbContainer>
+                </HeaderContainer>
+            )}
         </>
     )
 }
