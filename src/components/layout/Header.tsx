@@ -48,6 +48,12 @@ export default function Header() {
                     </HeaderBredcrumbContainer>
                 </HeaderContainer>
             )}
+
+            {pathname === `/user-management` && (
+                <HeaderContainer>
+                    <HeaderTitleAndDescription title="User Management" description="Manage all users and their roles" />
+                </HeaderContainer>
+            )}
         </>
     )
 }
