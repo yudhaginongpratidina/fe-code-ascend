@@ -49,6 +49,28 @@ export default function Header() {
                 </HeaderContainer>
             )}
 
+            {pathname === `/my-learning` && (
+                <HeaderContainer>
+                    <HeaderTitleAndDescription title="My Learning" />
+                    <HeaderBredcrumbContainer>
+                        <HeaderRootLink icon={<FaHome />} href="/dashboard" />
+                        <HeaderBredCrumbSlash />
+                        <HeaderBredCrumbLink name="My Learning" href="/my-learning" />
+                    </HeaderBredcrumbContainer>
+                </HeaderContainer>
+            )}
+
+            {pathname === `/my-learning/${params.moduleId}` && (
+                <HeaderContainer>
+                    <HeaderTitleAndDescription title="Learning" />
+                    <HeaderBredcrumbContainer>
+                        <HeaderRootLink icon={<FaHome />} href="/dashboard" />
+                        <HeaderBredCrumbSlash />
+                        <HeaderBredCrumbLink name="My Learning" href="/my-learning" />
+                    </HeaderBredcrumbContainer>
+                </HeaderContainer>
+            )}
+
             {pathname === `/user-management` && (
                 <HeaderContainer>
                     <HeaderTitleAndDescription title="User Management" />

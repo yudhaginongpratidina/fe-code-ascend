@@ -6,7 +6,7 @@ export default function JumbotronHome() {
         <section className="relative w-full min-h-[650px] flex flex-col justify-center bg-gradient-to-r from-indigo-900 to-blue-800 overflow-hidden">
             <div className="container relative mx-auto grid items-center grid-cols-1 lg:grid-cols-2 gap-12 px-4 md:px-6 z-10">
                 <div className="w-full flex flex-col gap-6 py-12">
-                    <div className="inline-block px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold mb-2">
+                    <div className="inline-block px-4 py-2 bg-blue-100 text-blue-800 rounded-sm text-sm font-semibold mb-2">
                         Best interactive learning
                     </div>
                     <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
@@ -49,7 +49,7 @@ export default function JumbotronHome() {
 
 const ButtonCTA = ({ href, name, className }: { href: string, name: string, className?: string }) => {
     return (
-        <Link href={href} className={`px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 ${className}`}>
+        <Link href={href} className={`px-6 py-3 rounded-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 ${className}`}>
             {name}
         </Link>
     )

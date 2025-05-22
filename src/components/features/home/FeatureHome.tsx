@@ -41,7 +41,7 @@ export default function FeatureHome() {
 const CardFeature = ({ icon, name, description, href, borderColor, iconColor }: Readonly<{ icon: React.ReactNode, name: string, description: string, href: string, borderColor: string, iconColor: string }>) => {
     return (
         <>
-            <div className={`bg-white rounded-xl shadow-lg p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-xl border-t-4 ${borderColor}`}>
+            <div className={`bg-white rounded-sm shadow-lg p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-xl border-t-4 ${borderColor}`}>
                 <div className="flex items-center mb-4">
                     <div className={`w-12 h-12 rounded-full ${iconColor} flex items-center justify-center mr-4`}>
                         {icon}
