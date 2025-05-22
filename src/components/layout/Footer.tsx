@@ -1,12 +1,18 @@
 "use client"
 import Link from "next/link";
-import { usePathname } from "next/navigation"
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
     const pathname = usePathname();
 
+    const isFixedFooter = !(
+        pathname === "/home" ||
+        pathname.startsWith("/list-module") ||
+        pathname === "/docs"
+    );
+
     return (
-        <footer className={`w-full` + (pathname === "/home" || pathname.startsWith("/list-module") || pathname === "/docs" ? " " : "fixed bottom-0")}>
+        <footer className={`w-full ${isFixedFooter ? "fixed bottom-0 z-10" : ""}`}>
             <div className="w-full h-14 px-4 md:px-14 box-border flex justify-between items-center shadow drop-shadow-sm bg-white">
                 <p className="text-gray-500 text-sm">
                     © {new Date().getFullYear()} YourCompany. All rights reserved.
@@ -24,5 +30,5 @@ export default function Footer() {
                 </div>
             </div>
         </footer>
-    )
+    );
 }

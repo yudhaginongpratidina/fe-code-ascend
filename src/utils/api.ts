@@ -72,7 +72,7 @@ const refreshToken = async (): Promise<string | null> => {
         secureLocalStorage.clear();
         // Periksa apakah kode berjalan di browser sebelum mengakses window
         if (typeof window !== 'undefined') {
-            window.location.href = "/auth"; // Redirect jika gagal refresh
+            window.location.href = "/login"; // Redirect jika gagal refresh
         }
         return null;
     } finally {
@@ -156,7 +156,7 @@ api.interceptors.response.use(
                     await removeStorageAuthenticated();
                     secureLocalStorage.clear();
                     if (typeof window !== 'undefined') {
-                        window.location.href = "/auth";
+                        window.location.href = "/login";
                     }
                     return Promise.reject(refreshError);
                 }
