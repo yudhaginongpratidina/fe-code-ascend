@@ -1,11 +1,12 @@
 "use client"
-import { usePathname } from "next/navigation"
+import { usePathname, useParams } from "next/navigation"
 import Link from "next/link";
 
 import { FaHome } from "react-icons/fa";
 
 export default function Header() {
     const pathname = usePathname();
+    const params = useParams();
 
     return (
         <>
@@ -22,6 +23,19 @@ export default function Header() {
                         <HeaderRootLink icon={<FaHome />} href="/dashboard" />
                         <HeaderBredCrumbSlash />
                         <HeaderBredCrumbLink name="My Module" href="/my-module" />
+                    </HeaderBredcrumbContainer>
+                </HeaderContainer>
+            )}
+
+            {pathname === `/my-module/${params.moduleId}` && (
+                <HeaderContainer>
+                    <HeaderTitleAndDescription title="Chapter Management" />
+                    <HeaderBredcrumbContainer>
+                        <HeaderRootLink icon={<FaHome />} href="/dashboard" />
+                        <HeaderBredCrumbSlash />
+                        <HeaderBredCrumbLink name="My Module" href="/my-module" />
+                        <HeaderBredCrumbSlash />
+                        <HeaderBredCrumbLink name="Chapters" href={`/my-module/${params.moduleId}`} />
                     </HeaderBredcrumbContainer>
                 </HeaderContainer>
             )}

@@ -40,6 +40,7 @@ export default function IconButton({
       border
       transition-all duration-200
       shadow-sm hover:shadow
+      hover:cursor-pointer
       ${className}
     `;
     }, [className, variant, size]);

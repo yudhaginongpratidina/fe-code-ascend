@@ -8,11 +8,11 @@ import Label from "@/components/ui/Label";
 import TextField from "@/components/ui/TextField";
 import Select from "@/components/ui/Select";
 import Button from "@/components/ui/Button";
-
-import { FaList, FaEdit, FaTrash, FaTrashRestore, FaUsers } from "react-icons/fa";
 import IconButton from "@/components/ui/IconButton";
 import Modal from "@/components/ui/Modal";
 import MarkdownEditor from "@/components/ui/MarkdownEditor";
+
+import { FaList, FaEdit, FaTrash, FaUsers } from "react-icons/fa";
 import { IoIosCreate } from "react-icons/io";
 import { MdOutlineRestore } from "react-icons/md";
 
@@ -201,10 +201,6 @@ export default function Page() {
 
     const handleGroupingChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setGrouping(e.target.value as GroupingType);
-    };
-
-    const handleSearchClear = () => {
-        setSearchQuery("");
     };
 
     // Form submissions
