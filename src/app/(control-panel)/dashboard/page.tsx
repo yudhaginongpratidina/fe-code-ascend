@@ -99,115 +99,94 @@ export default function Page() {
     const statCardsConfig = getStatCardsConfig();
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {/* Header section */}
+        <>
+            {statCardsConfig.count === 1 ? (
                 <div className="mb-8">
-                    <div className="flex justify-between items-center">
-                        <div>
-                            <h1 className="text-3xl font-bold text-gray-900">Learning Dashboard</h1>
-                            <p className="text-gray-600 mt-1">Welcome back! Here's your learning progress overview.</p>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <div className="text-right">
-                                <div className="text-sm text-gray-500">Current rank</div>
-                                <div className="text-xl font-bold text-blue-700">#{myrank}</div>
-                            </div>
-                            <div className="w-12 h-12 rounded-full border-2 flex justify-center items-center border-blue-200">
-                                <FaTrophy className="text-blue-500 text-2xl" />
-                            </div>
-                        </div>
-                    </div>
+                    <StatCardDashboard
+                        icon={<FaGraduationCap />}
+                        title="Total My Learning"
+                        value={myLearning?.length}
+                        bgColor="bg-gradient-to-br from-purple-500 to-purple-700"
+                    />
                 </div>
-
-                {statCardsConfig.count === 1 ? (
-                    <div className="mb-8">
+            ) : statCardsConfig.count === 2 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    {statCardsConfig.showTotalUsers && (
+                        <StatCardDashboard
+                            icon={<FaUsers />}
+                            title="Total Users"
+                            value={userData?.total_user}
+                            bgColor="bg-gradient-to-br from-blue-500 to-blue-700"
+                        />
+                    )}
+                    {statCardsConfig.showTotalModules && (
+                        <StatCardDashboard
+                            icon={<FaBook />}
+                            title="Total Modules"
+                            value={myModules?.length}
+                            bgColor="bg-gradient-to-br from-green-500 to-green-700"
+                        />
+                    )}
+                    {statCardsConfig.showMyLearning && (
                         <StatCardDashboard
                             icon={<FaGraduationCap />}
                             title="Total My Learning"
                             value={myLearning?.length}
                             bgColor="bg-gradient-to-br from-purple-500 to-purple-700"
                         />
-                    </div>
-                ) : statCardsConfig.count === 2 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                        {statCardsConfig.showTotalUsers && (
-                            <StatCardDashboard
-                                icon={<FaUsers />}
-                                title="Total Users"
-                                value={userData?.total_user}
-                                bgColor="bg-gradient-to-br from-blue-500 to-blue-700"
-                            />
-                        )}
-                        {statCardsConfig.showTotalModules && (
-                            <StatCardDashboard
-                                icon={<FaBook />}
-                                title="Total Modules"
-                                value={myModules?.length}
-                                bgColor="bg-gradient-to-br from-green-500 to-green-700"
-                            />
-                        )}
-                        {statCardsConfig.showMyLearning && (
-                            <StatCardDashboard
-                                icon={<FaGraduationCap />}
-                                title="Total My Learning"
-                                value={myLearning?.length}
-                                bgColor="bg-gradient-to-br from-purple-500 to-purple-700"
-                            />
-                        )}
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                        {statCardsConfig.showTotalUsers && (
-                            <StatCardDashboard
-                                icon={<FaUsers />}
-                                title="Total Users"
-                                value={userData?.total_user}
-                                bgColor="bg-gradient-to-br from-blue-500 to-blue-700"
-                            />
-                        )}
-                        {statCardsConfig.showTotalModules && (
-                            <StatCardDashboard
-                                icon={<FaBook />}
-                                title="Total Modules"
-                                value={myModules?.length}
-                                bgColor="bg-gradient-to-br from-green-500 to-green-700"
-                            />
-                        )}
-                        {statCardsConfig.showMyLearning && (
-                            <StatCardDashboard
-                                icon={<FaGraduationCap />}
-                                title="Total My Learning"
-                                value={myLearning?.length}
-                                bgColor="bg-gradient-to-br from-purple-500 to-purple-700"
-                            />
-                        )}
-                    </div>
-                )}
-                {statCardsConfig.count === 1 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    )}
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    {statCardsConfig.showTotalUsers && (
+                        <StatCardDashboard
+                            icon={<FaUsers />}
+                            title="Total Users"
+                            value={userData?.total_user}
+                            bgColor="bg-gradient-to-br from-blue-500 to-blue-700"
+                        />
+                    )}
+                    {statCardsConfig.showTotalModules && (
+                        <StatCardDashboard
+                            icon={<FaBook />}
+                            title="Total Modules"
+                            value={myModules?.length}
+                            bgColor="bg-gradient-to-br from-green-500 to-green-700"
+                        />
+                    )}
+                    {statCardsConfig.showMyLearning && (
+                        <StatCardDashboard
+                            icon={<FaGraduationCap />}
+                            title="Total My Learning"
+                            value={myLearning?.length}
+                            bgColor="bg-gradient-to-br from-purple-500 to-purple-700"
+                        />
+                    )}
+                </div>
+            )}
+            {statCardsConfig.count === 1 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <LeaderboardDashboard
+                        leaderboardData={leaderboardData}
+                        myexperience={profileData?.experience ?? 0}
+                        myrank={myrank}
+                    />
+                    <LeverProgressCardDashboard currentUser={profileData} />
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="lg:col-span-1">
                         <LeaderboardDashboard
                             leaderboardData={leaderboardData}
                             myexperience={profileData?.experience ?? 0}
                             myrank={myrank}
                         />
+                    </div>
+                    <div className="lg:col-span-2">
                         <LeverProgressCardDashboard currentUser={profileData} />
                     </div>
-                ) : (
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <div className="lg:col-span-1">
-                            <LeaderboardDashboard
-                                leaderboardData={leaderboardData}
-                                myexperience={profileData?.experience ?? 0}
-                                myrank={myrank}
-                            />
-                        </div>
-                        <div className="lg:col-span-2">
-                            <LeverProgressCardDashboard currentUser={profileData} />
-                        </div>
-                    </div>
-                )}
-            </div>
-        </div>
+                </div>
+            )}
+        </>
     );
 }
