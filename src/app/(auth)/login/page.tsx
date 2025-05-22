@@ -62,6 +62,7 @@ export default function Page() {
                 secureLocalStorage.setItem("role", decode.role);
             }
 
+            setTimeout(() => window.location.href = "/dashboard", 3000);
         } catch (error: any) {
             const errorMessage = error?.response?.data?.message || error?.response?.data[0]?.message || error?.response?.data?.data[0].message || "An error occurred";
             setFormData({ ...formData, isLoading: false, isError: true, message: errorMessage });

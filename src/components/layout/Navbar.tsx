@@ -1,16 +1,44 @@
 "use client"
-import { useState } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
-import { FaLaptopCode, FaUser } from "react-icons/fa";
+import { FaLaptopCode, FaUser, FaUserCircle } from "react-icons/fa";
 import { IoMoon } from "react-icons/io5";
 import { MdMenu } from "react-icons/md";
+import { removeCookieAuthenticated } from "@/utils/cookie-authenticated";
+import { removeStorageAuthenticated } from "@/utils/secure-storage-authenticated";
+import api from "@/utils/api";
+import secureLocalStorage from "react-secure-storage";
+import clsx from "clsx";
+import { AiOutlineLoading } from "react-icons/ai";
+import { RxDashboard } from "react-icons/rx";
 
 export default function Navbar() {
     const pathname = usePathname();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [hamburgerRightIsAcitive, setHamburgerRightIsAcitive] = useState<boolean>(false);
+
+    const handleLogout = async () => {
+        try {
+            await api.get("/auth/logout");
+            await removeCookieAuthenticated();
+            await removeStorageAuthenticated();
+            secureLocalStorage.clear();
+            window.location.href = "/login";
+        } catch (error: any) {
+            console.error(error?.response?.data?.message);
+        }
+    };
+
+    useEffect(() => {
+        const checkAuthentication = async () => {
+            const res = await fetch('/api');
+            const data = await res.json();
+            setIsAuthenticated(data.authenticated);
+        }
+        checkAuthentication();
+    }, []);
 
     return (
         <nav className="w-full fixed top-0 z-30">
@@ -28,7 +56,40 @@ export default function Navbar() {
                 <NavbarItems>
                     <NavbarIconButton icon={<IoMoon className="w-6 h-6" />} onClick={() => { }} />
                     {isAuthenticated
-                        ? <NavbarIconButton icon={<FaUser className="w-6 h-6" />} onClick={() => { }} />
+                        ? (
+                            <>
+                                {isAuthenticated && (
+                                    <>
+                                        <NavbarAvatar>
+                                            <NavbarAvatarItem
+                                                fullWidth
+                                                name="dashboard"
+                                                type="button"
+                                                icon={<RxDashboard className="w-4 h-4" />}
+                                                onClick={() => { window.location.href = "/dashboard" }}
+                                                className="justify-start py-2 px-1.5 border-transparent hover:border-gray-100 hover:bg-gray-100"
+                                            />
+                                            <NavbarAvatarItem
+                                                fullWidth
+                                                name="profile"
+                                                type="button"
+                                                icon={<FaUser className="w-4 h-4" />}
+                                                onClick={() => { window.location.href = "/my-profile" }}
+                                                className="justify-start py-2 px-1.5 border-transparent hover:border-gray-100 hover:bg-gray-100"
+                                            />
+                                            <hr className="w-full text-gray-300" />
+                                            <NavbarAvatarItem
+                                                fullWidth
+                                                name="log out"
+                                                type="button"
+                                                onClick={() => { handleLogout() }}
+                                                className="py-2 px-4 border-red-500 bg-red-500 hover:bg-red-600 text-white"
+                                            />
+                                        </NavbarAvatar>
+                                    </>
+                                )}
+                            </>
+                        )
                         : <NavbarButtonLink href="/login" name="Login" />
                     }
                     <NavbarHamburgerRight onClick={() => setHamburgerRightIsAcitive(!hamburgerRightIsAcitive)} />
@@ -96,4 +157,65 @@ const NavbarHamburgerRight = ({ onClick }: Readonly<{ onClick: () => void }>) =>
             <MdMenu className="w-6 h-6" />
         </button>
     )
+}
+
+export const NavbarAvatar = ({ children }: { children: React.ReactNode }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    const toggleDropdown = () => {
+        setIsOpen(!isOpen);
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    return (
+        <div className="relative" ref={dropdownRef}>
+            <button type="button" onClick={toggleDropdown} className="w-9 h-9 flex items-center justify-center border rounded-sm shadow-sm border-gray-200 hover:bg-black hover:text-white">
+                {<FaUserCircle className="w-5 h-5" />}
+            </button>
+            {isOpen && (
+                <div className="absolute right-0 mt-3 z-30 w-64 rounded-md bg-white shadow-lg ring-1 ring-black/10 p-4 animate-fade-in">
+                    {children}
+                </div>
+            )}
+        </div>
+    );
+};
+
+const NavbarAvatarItem = ({ name, type, fullWidth = false, onClick, icon, isLoading = false, className, ...props }: { name: string; type: "submit" | "reset" | "button"; fullWidth?: boolean; onClick?: () => void; icon?: React.ReactNode; isLoading?: boolean; className?: string;[key: string]: any; }) => {
+
+    const buttonClasses = useMemo(() => clsx(
+        "capitalize border rounded-sm flex justify-center items-center gap-4 duration-200",
+        fullWidth ? "w-full" : "w-fit",
+        {
+            "cursor-not-allowed opacity-60": isLoading,
+            "cursor-pointer": !isLoading,
+        },
+        className
+    ), [fullWidth, isLoading, className]);
+
+    return (
+        <button type={type} className={buttonClasses} disabled={isLoading} onClick={onClick} {...props} >
+            {isLoading
+                ? (<AiOutlineLoading className="w-5 h-5 animate-spin" />)
+                : (
+                    <>
+                        {icon && <span>{icon}</span>}
+                        <span className="capitalize text-sm font-semibold text-nowrap">{name}</span>
+                    </>
+                )}
+        </button>
+    );
 }
