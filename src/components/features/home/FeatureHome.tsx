@@ -10,9 +10,9 @@ export default function FeatureHome() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <CardFeature
                         icon={<IoCode className="w-6 h-6 text-blue-600" />}
-                        name="Interactive Code Editor"
+                        name="Live Code Editor"
                         description="Write, compile, and run code directly in the browser with our user-friendly code editor and real-time feedback."
-                        href="/"
+                        href="/interactive-code-editor"
                         borderColor="border-blue-500"
                         iconColor="bg-blue-100"
                     />
@@ -20,7 +20,7 @@ export default function FeatureHome() {
                         icon={<FaDisplay className="w-6 h-6 text-indigo-600" />}
                         name="Fast and Interactive Learning"
                         description="An interactive learning method that makes it easy to understand basic programming concepts."
-                        href="/"
+                        href="/fast-and-interactive-learning"
                         borderColor="border-indigo-500"
                         iconColor="bg-indigo-100"
                     />
@@ -28,7 +28,7 @@ export default function FeatureHome() {
                         icon={<MdTrackChanges className="w-6 h-6 text-yellow-600" />}
                         name="Learning Progress"
                         description="Learning progress that shows the development of understanding of basic programming concepts."
-                        href="/"
+                        href="/learning-progress"
                         borderColor="border-yellow-500"
                         iconColor="bg-yellow-100"
                     />

@@ -8,7 +8,10 @@ export default function Footer() {
     const isFixedFooter = !(
         pathname === "/home" ||
         pathname.startsWith("/list-module") ||
-        pathname === "/docs"
+        pathname === "/docs" ||
+        pathname === "/interactive-code-editor" ||
+        pathname === "/learning-progress" ||
+        pathname === "/fast-and-interactive-learning"
     );
 
     return (

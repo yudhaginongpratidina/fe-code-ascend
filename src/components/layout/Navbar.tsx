@@ -46,7 +46,7 @@ export default function Navbar() {
                 <NavbarItems>
                     <NavbarBrand />
                 </NavbarItems>
-                {(pathname === "/home" || pathname.startsWith("/list-module") || pathname.startsWith("/docs")) && (
+                {(pathname === "/home" || pathname.startsWith("/list-module") || pathname.startsWith("/docs") || pathname === "/interactive-code-editor" || pathname === "/fast-and-interactive-learning" || pathname === "/learning-progress") && (
                     <NavbarItems className="hidden md:flex">
                         <NavbarLink href="/home" name="Home" />
                         <NavbarLink href="/list-module" name="Module" />

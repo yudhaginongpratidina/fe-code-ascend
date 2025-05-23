@@ -49,6 +49,17 @@ export default function Header() {
                 </HeaderContainer>
             )}
 
+            {pathname === `/leaderboard` && (
+                <HeaderContainer>
+                    <HeaderTitleAndDescription title="Leaderboard" />
+                    <HeaderBredcrumbContainer>
+                        <HeaderRootLink icon={<FaHome />} href="/dashboard" />
+                        <HeaderBredCrumbSlash />
+                        <HeaderBredCrumbLink name="Leaderboard" href="/leaderboard" />
+                    </HeaderBredcrumbContainer>
+                </HeaderContainer>
+            )}
+
             {pathname === `/my-learning` && (
                 <HeaderContainer>
                     <HeaderTitleAndDescription title="My Learning" />

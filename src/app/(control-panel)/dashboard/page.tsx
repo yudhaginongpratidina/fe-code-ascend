@@ -6,6 +6,7 @@ import LeverProgressCardDashboard from "@/components/features/dashboard/LeverPro
 import { useState, useEffect } from "react";
 import api from '@/utils/api';
 import { FaUsers, FaBook, FaGraduationCap, FaTrophy } from "react-icons/fa";
+import MenuDashboard from "@/components/features/dashboard/MenuDashboard";
 
 type Profile = {
     id: string;
@@ -164,8 +165,11 @@ export default function Page() {
                     )}
                 </div>
             )}
+
+            <MenuDashboard/>
+
             {statCardsConfig.count === 1 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
                     <LeaderboardDashboard
                         leaderboardData={leaderboardData}
                         myexperience={profileData?.experience ?? 0}
@@ -174,7 +178,7 @@ export default function Page() {
                     <LeverProgressCardDashboard currentUser={profileData} />
                 </div>
             ) : (
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-16">
                     <div className="lg:col-span-1">
                         <LeaderboardDashboard
                             leaderboardData={leaderboardData}
