@@ -50,11 +50,9 @@ export default function Navbar() {
                     <NavbarItems className="hidden md:flex">
                         <NavbarLink href="/home" name="Home" />
                         <NavbarLink href="/list-module" name="Module" />
-                        <NavbarLink href="/docs" name="Docs" />
                     </NavbarItems>
                 )}
                 <NavbarItems>
-                    <NavbarIconButton icon={<IoMoon className="w-6 h-6" />} onClick={() => { }} />
                     {isAuthenticated
                         ? (
                             <>
