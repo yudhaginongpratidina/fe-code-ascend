@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import api from "@/utils/api";
-import { setCookieAuthenticated } from "@/utils/cookie-authenticated";
 import { setStorageAuthenticated } from "@/utils/secure-storage-authenticated";
 import secureLocalStorage from "react-secure-storage";
 import { jwtDecode } from "jwt-decode";
@@ -43,7 +42,6 @@ export default function Page() {
                     password: password,
                 });
                 const { data, message } = response.data
-                setCookieAuthenticated(true);
                 setStorageAuthenticated(data.token);
                 setFormData({ ...formData, isLoading: false, isError: false, message: message });
                 const decode: any = jwtDecode(data.token);
@@ -55,7 +53,6 @@ export default function Page() {
                     password: password,
                 });
                 const { data, message } = response.data
-                setCookieAuthenticated(true);
                 setStorageAuthenticated(data.token);
                 setFormData({ ...formData, isLoading: false, isError: false, message: message });
                 const decode: any = jwtDecode(data.token);

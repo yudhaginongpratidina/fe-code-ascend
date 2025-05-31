@@ -4,11 +4,8 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 import { FaLaptopCode, FaUser, FaUserCircle } from "react-icons/fa";
-import { IoMoon } from "react-icons/io5";
 import { MdMenu } from "react-icons/md";
-import { removeCookieAuthenticated } from "@/utils/cookie-authenticated";
 import { removeStorageAuthenticated } from "@/utils/secure-storage-authenticated";
-import api from "@/utils/api";
 import secureLocalStorage from "react-secure-storage";
 import clsx from "clsx";
 import { AiOutlineLoading } from "react-icons/ai";
@@ -21,8 +18,6 @@ export default function Navbar() {
 
     const handleLogout = async () => {
         try {
-            await api.get("/auth/logout");
-            await removeCookieAuthenticated();
             await removeStorageAuthenticated();
             secureLocalStorage.clear();
             window.location.href = "/login";
@@ -32,12 +27,10 @@ export default function Navbar() {
     };
 
     useEffect(() => {
-        const checkAuthentication = async () => {
-            const res = await fetch('/api');
-            const data = await res.json();
-            setIsAuthenticated(data.authenticated);
+        const token = secureLocalStorage.getItem("access_token");
+        if (token) {
+            setIsAuthenticated(true);
         }
-        checkAuthentication();
     }, []);
 
     return (
