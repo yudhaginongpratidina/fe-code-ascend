@@ -21,14 +21,11 @@ export default function Footer() {
                     © {new Date().getFullYear()} YourCompany. All rights reserved.
                 </p>
                 <div className="hidden md:flex space-x-6 mt-4 md:mt-0">
-                    <Link href="/" className="text-gray-500 hover:text-blue-600 text-sm">
+                    <Link href="/privacy-policy" className="text-gray-500 hover:text-blue-600 text-sm">
                         Privacy Policy
                     </Link>
-                    <Link href="/" className="text-gray-500 hover:text-blue-600 text-sm">
+                    <Link href="/terms-of-services" className="text-gray-500 hover:text-blue-600 text-sm">
                         Terms of Service
-                    </Link>
-                    <Link href="/" className="text-gray-500 hover:text-blue-600 text-sm">
-                        Cookie Policy
                     </Link>
                 </div>
             </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import secureLocalStorage from "react-secure-storage";
 import api from "@/utils/api";
 
 import { Form, FormSplit, FormItem, FormMessage } from "@/components/ui/Form";
@@ -11,6 +12,7 @@ import Button from "@/components/ui/Button";
 import IconButton from "@/components/ui/IconButton";
 import Modal from "@/components/ui/Modal";
 import MarkdownEditor from "@/components/ui/MarkdownEditor";
+import Unauthorized from "@/components/ui/Unauthorized";
 
 import { FaList, FaEdit, FaTrash, FaUsers } from "react-icons/fa";
 import { IoIosCreate } from "react-icons/io";
@@ -81,6 +83,7 @@ const GROUP_OPTIONS = [
 
 export default function Page() {
     // State management
+    const [role, setRole] = useState<string | null>(null);
     const [formTitle, setFormTitle] = useState<string>("create");
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [modalConfirmDelete, setModalConfirmDelete] = useState<boolean>(false);
@@ -92,6 +95,8 @@ export default function Page() {
 
     // Fetch modules on component mount
     useEffect(() => {
+        const role: any = secureLocalStorage.getItem("role");
+        setRole(role);
         fetchModules();
     }, []);
 
@@ -391,231 +396,184 @@ export default function Page() {
     };
     return (
         <>
-            <div className="w-full flex flex-col gap-4 md:flex-row md:justify-between md:items-center">
-                <TextField
-                    type="search"
-                    name="search"
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    required={false}
-                    disabled={false}
-                    isLoading={false}
-                    isError={false}
-                />
-                <Select
-                    name="grouping"
-                    value={grouping}
-                    onChange={handleGroupingChange}
-                    options={GROUP_OPTIONS.map(option => ({
-                        ...option,
-                        label: `${option.label} (${moduleStats[option.value as keyof typeof moduleStats]})`
-                    }))}
-                    disabled={false}
-                    required={false}
-                    isLoading={false}
-                    isError={false}
-                />
-                <Button
-                    name="New"
-                    type="button"
-                    onClick={() => handleOpenModal("create")}
-                    className="border-black bg-black text-white hover:bg-gray-800 hover:text-white"
-                    disabled={false}
-                    isLoading={false}
-                    fullWidth={false}
-                />
-            </div>
-            <div className="w-full max-h-[80vh] overflow-auto rounded-sm flex flex-col gap-4 bg-white">
-                <div className="w-full max-h-[40vh] overflow-auto">
-                    {formData.isLoading && !modules.length ? (
-                        <div className="text-center py-8">Loading modules...</div>
-                    ) : modules.length === 0 ? (
-                        <div className="text-center py-8">No modules found. Create your first module!</div>
-                    ) : filteredModules.length === 0 ? (
-                        <div className="text-center py-8">No modules match your search criteria.</div>
-                    ) : (
-                        <table className="w-full">
-                            <thead className="w-full sticky top-0 bg-white">
-                                <tr className="w-full capitalize border-y border-gray-300 bg-black text-white">
-                                    <td className="w-[50px] p-2 text-center">No</td>
-                                    <td className="min-w-[200px] p-2">Title</td>
-                                    <td className="min-w-[100px] p-2 text-center">Level</td>
-                                    <td className="min-w-[100px] p-2 text-center">Points Required</td>
-                                    <td className="min-w-[100px] p-2 text-center">Status</td>
-                                    <td className="min-w-[100px] p-2 text-center">Free Access</td>
-                                    <td className="min-w-[100px] p-2 text-center">Status</td>
-                                    <td className="min-w-[100px] p-2 text-center">Actions</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredModules.map((module, index) => (
-                                    <tr key={module.id} className={`w-full border-b border-gray-300 hover:bg-gray-100 ${module.is_deleted ? 'bg-gray-50' : ''}`}>
-                                        <td className="w-[50px] p-2 text-center">{index + 1}</td>
-                                        <td className="min-w-[200px] p-2 capitalize">{module.title}</td>
-                                        <td className="min-w-[100px] p-2 text-center">
-                                            {renderLevelBadge(module.level)}
-                                        </td>
-                                        <td className="min-w-[100px] p-2 text-center">{module.points_required}</td>
-                                        <td className="min-w-[100px] p-2 text-center">
-                                            {renderStatusBadge(module.is_published, 'published')}
-                                        </td>
-                                        <td className="min-w-[100px] p-2 text-center">
-                                            {renderStatusBadge(module.is_free, 'free')}
-                                        </td>
-                                        <td className="w-fit p-2 text-center">
-                                            {module.is_deleted ? (
-                                                <span className="text-sm font-semibold text-red-600 bg-red-100 px-3 py-1 rounded-full shadow-sm hover:bg-red-200 transition-colors duration-200">
-                                                    Deleted
-                                                </span>
-                                            ) : (
-                                                <span className="text-sm font-semibold text-green-600 bg-green-100 px-3 py-1 rounded-full shadow-sm hover:bg-green-200 transition-colors duration-200">
-                                                    Active
-                                                </span>
-                                            )}
-                                        </td>
-                                        <td className="min-w-[100px] p-2 text-center">
-                                            <div className="w-full flex justify-center items-center gap-2">
-                                                <IconButton
-                                                    icon={<FaList className="w-4 h-4" />}
-                                                    onClick={() => navigateToModuleDetails(module.id)}
-                                                    className="text-gray-500 hover:text-gray-700 transition duration-200"
-                                                    aria-label="View details"
-                                                    type="button"
-                                                />
-                                                {module.is_deleted === false && (
-                                                    <>
-                                                        <IconButton
-                                                            icon={<FaEdit className="w-4 h-4 text-orange-500" />}
-                                                            onClick={() => handleOpenModal("edit", module.id)}
-                                                            className="text-gray-500 hover:text-gray-700 transition duration-200"
-                                                            aria-label="Edit module"
-                                                            type="button"
-                                                        />
-                                                        <IconButton
-                                                            icon={<FaUsers className="w-4 h-4 text-blue-500" />}
-                                                            onClick={() => window.location.href = `/my-module/users/${module.id}`}
-                                                            className="text-gray-500 hover:text-gray-700 transition duration-200"
-                                                            aria-label="Edit module"
-                                                            type="button"
-                                                        />
-                                                    </>
-                                                )}
-                                                {module.is_deleted === false && (
-                                                    <IconButton
-                                                        icon={<FaTrash className="w-4 h-4 text-red-500" />}
-                                                        onClick={() => handleModalConfirmDelete(module.id)}
-                                                        className={`${module.is_deleted ? 'text-gray-400 cursor-not-allowed' : 'text-gray-500 hover:text-gray-700'} transition duration-200`}
-                                                        aria-label="Delete module"
-                                                        type="button"
-                                                    />
-                                                )}
-                                                {module.is_deleted === true && (
-                                                    <IconButton
-                                                        icon={<MdOutlineRestore className="w-4 h-4 text-green-500" />}
-                                                        onClick={() => handleRestoreModal(module.id)}
-                                                        aria-label="Restore module"
-                                                        type="button"
-                                                    />
-                                                )}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    )}
-                </div>
-            </div>
-            <Modal
-                icon={<IoIosCreate className="w-6 h-6" />}
-                isActive={modalOpen}
-                title={formTitle === "create" ? "New" : "Edit"}
-                closeModal={() => setModalOpen(false)}
-                className="max-w-5xl"
-            >
-                <Form onSubmit={formTitle === "create" ? handleCreate : handleUpdate}>
-                    {formData.message && (
-                        <FormMessage message={formData.message ?? ""} isError={formData.isError ?? false} />
-                    )}
-                    {formTitle === "edit" && (
-                        <FormItem>
-                            <Label
-                                htmlFor="module_id"
-                                name="Module ID"
-                                required
-                            />
+            {role === "superadmin" || role === "admin" || role === "contributor"
+                ? (
+                    <>
+                        <div className="w-full flex flex-col gap-4 md:flex-row md:justify-between md:items-center">
                             <TextField
-                                type="text"
-                                name="module_id"
-                                value={String(formData.module_id)}
-                                onChange={handleChange}
-                                required={true}
-                                disabled={true}
-                                isLoading={formData.isLoading}
-                                isError={formData.isError}
+                                type="search"
+                                name="search"
+                                value={searchQuery}
+                                onChange={handleSearchChange}
+                                required={false}
+                                disabled={false}
+                                isLoading={false}
+                                isError={false}
                             />
-                        </FormItem>
-                    )}
-                    <FormItem>
-                        <Label
-                            htmlFor="title"
-                            name="Title"
-                            required
-                        />
-                        <TextField
-                            type="text"
-                            name="title"
-                            value={formData.title}
-                            onChange={handleChange}
-                            required={true}
-                            disabled={formData.isLoading}
-                            isLoading={formData.isLoading}
-                            isError={formData.isError}
-                        />
-                    </FormItem>
-                    <FormItem>
-                        <Label
-                            htmlFor="description"
-                            name="Description"
-                            required
-                        />
-                        <MarkdownEditor
-                            dataColorMode={"light"}
-                            mode={"edit"}
-                            value={formData.description}
-                            onChange={handleMarkdownChange}
-                        />
-                    </FormItem>
-                    <FormItem>
-                        <Label
-                            htmlFor="level"
-                            name="Level"
-                            required
-                        />
-                        <Select
-                            name="level"
-                            options={LEVEL_OPTIONS}
-                            value={formData.level}
-                            onChange={handleChange}
-                            disabled={formData.isLoading}
-                            isLoading={formData.isLoading}
-                            isError={formData.isError}
-                            required={true}
-                        />
-                    </FormItem>
-                    {formTitle === "edit" && (
-                        <>
-                            <FormSplit>
+                            <Select
+                                name="grouping"
+                                value={grouping}
+                                onChange={handleGroupingChange}
+                                options={GROUP_OPTIONS.map(option => ({
+                                    ...option,
+                                    label: `${option.label} (${moduleStats[option.value as keyof typeof moduleStats]})`
+                                }))}
+                                disabled={false}
+                                required={false}
+                                isLoading={false}
+                                isError={false}
+                            />
+                            <Button
+                                name="New"
+                                type="button"
+                                onClick={() => handleOpenModal("create")}
+                                className="border-black bg-black text-white hover:bg-gray-800 hover:text-white"
+                                disabled={false}
+                                isLoading={false}
+                                fullWidth={false}
+                            />
+                        </div>
+                        <div className="w-full max-h-[80vh] overflow-auto rounded-sm flex flex-col gap-4 bg-white">
+                            <div className="w-full max-h-[40vh] overflow-auto">
+                                {formData.isLoading && !modules.length ? (
+                                    <div className="text-center py-8">Loading modules...</div>
+                                ) : modules.length === 0 ? (
+                                    <div className="text-center py-8">No modules found. Create your first module!</div>
+                                ) : filteredModules.length === 0 ? (
+                                    <div className="text-center py-8">No modules match your search criteria.</div>
+                                ) : (
+                                    <table className="w-full">
+                                        <thead className="w-full sticky top-0 bg-white">
+                                            <tr className="w-full capitalize border-y border-gray-300 bg-black text-white">
+                                                <td className="w-[50px] p-2 text-center">No</td>
+                                                <td className="min-w-[200px] p-2">Title</td>
+                                                <td className="min-w-[100px] p-2 text-center">Level</td>
+                                                <td className="min-w-[100px] p-2 text-center">Points Required</td>
+                                                <td className="min-w-[100px] p-2 text-center">Status</td>
+                                                <td className="min-w-[100px] p-2 text-center">Free Access</td>
+                                                <td className="min-w-[100px] p-2 text-center">Status</td>
+                                                <td className="min-w-[100px] p-2 text-center">Actions</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {filteredModules.map((module, index) => (
+                                                <tr key={module.id} className={`w-full border-b border-gray-300 hover:bg-gray-100 ${module.is_deleted ? 'bg-gray-50' : ''}`}>
+                                                    <td className="w-[50px] p-2 text-center">{index + 1}</td>
+                                                    <td className="min-w-[200px] p-2 capitalize">{module.title}</td>
+                                                    <td className="min-w-[100px] p-2 text-center">
+                                                        {renderLevelBadge(module.level)}
+                                                    </td>
+                                                    <td className="min-w-[100px] p-2 text-center">{module.points_required}</td>
+                                                    <td className="min-w-[100px] p-2 text-center">
+                                                        {renderStatusBadge(module.is_published, 'published')}
+                                                    </td>
+                                                    <td className="min-w-[100px] p-2 text-center">
+                                                        {renderStatusBadge(module.is_free, 'free')}
+                                                    </td>
+                                                    <td className="w-fit p-2 text-center">
+                                                        {module.is_deleted ? (
+                                                            <span className="text-sm font-semibold text-red-600 bg-red-100 px-3 py-1 rounded-full shadow-sm hover:bg-red-200 transition-colors duration-200">
+                                                                Deleted
+                                                            </span>
+                                                        ) : (
+                                                            <span className="text-sm font-semibold text-green-600 bg-green-100 px-3 py-1 rounded-full shadow-sm hover:bg-green-200 transition-colors duration-200">
+                                                                Active
+                                                            </span>
+                                                        )}
+                                                    </td>
+                                                    <td className="min-w-[100px] p-2 text-center">
+                                                        <div className="w-full flex justify-center items-center gap-2">
+                                                            <IconButton
+                                                                icon={<FaList className="w-4 h-4" />}
+                                                                onClick={() => navigateToModuleDetails(module.id)}
+                                                                className="text-gray-500 hover:text-gray-700 transition duration-200"
+                                                                aria-label="View details"
+                                                                type="button"
+                                                            />
+                                                            {module.is_deleted === false && (
+                                                                <>
+                                                                    <IconButton
+                                                                        icon={<FaEdit className="w-4 h-4 text-orange-500" />}
+                                                                        onClick={() => handleOpenModal("edit", module.id)}
+                                                                        className="text-gray-500 hover:text-gray-700 transition duration-200"
+                                                                        aria-label="Edit module"
+                                                                        type="button"
+                                                                    />
+                                                                    <IconButton
+                                                                        icon={<FaUsers className="w-4 h-4 text-blue-500" />}
+                                                                        onClick={() => window.location.href = `/my-module/users/${module.id}`}
+                                                                        className="text-gray-500 hover:text-gray-700 transition duration-200"
+                                                                        aria-label="Edit module"
+                                                                        type="button"
+                                                                    />
+                                                                </>
+                                                            )}
+                                                            {module.is_deleted === false && (
+                                                                <IconButton
+                                                                    icon={<FaTrash className="w-4 h-4 text-red-500" />}
+                                                                    onClick={() => handleModalConfirmDelete(module.id)}
+                                                                    className={`${module.is_deleted ? 'text-gray-400 cursor-not-allowed' : 'text-gray-500 hover:text-gray-700'} transition duration-200`}
+                                                                    aria-label="Delete module"
+                                                                    type="button"
+                                                                />
+                                                            )}
+                                                            {module.is_deleted === true && (
+                                                                <IconButton
+                                                                    icon={<MdOutlineRestore className="w-4 h-4 text-green-500" />}
+                                                                    onClick={() => handleRestoreModal(module.id)}
+                                                                    aria-label="Restore module"
+                                                                    type="button"
+                                                                />
+                                                            )}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                )}
+                            </div>
+                        </div>
+                        <Modal
+                            icon={<IoIosCreate className="w-6 h-6" />}
+                            isActive={modalOpen}
+                            title={formTitle === "create" ? "New" : "Edit"}
+                            closeModal={() => setModalOpen(false)}
+                            className="max-w-5xl"
+                        >
+                            <Form onSubmit={formTitle === "create" ? handleCreate : handleUpdate}>
+                                {formData.message && (
+                                    <FormMessage message={formData.message ?? ""} isError={formData.isError ?? false} />
+                                )}
+                                {formTitle === "edit" && (
+                                    <FormItem>
+                                        <Label
+                                            htmlFor="module_id"
+                                            name="Module ID"
+                                            required
+                                        />
+                                        <TextField
+                                            type="text"
+                                            name="module_id"
+                                            value={String(formData.module_id)}
+                                            onChange={handleChange}
+                                            required={true}
+                                            disabled={true}
+                                            isLoading={formData.isLoading}
+                                            isError={formData.isError}
+                                        />
+                                    </FormItem>
+                                )}
                                 <FormItem>
                                     <Label
-                                        htmlFor="visibility"
-                                        name="Visibility"
+                                        htmlFor="title"
+                                        name="Title"
                                         required
                                     />
-                                    <Select
-                                        name="is_published"
-                                        options={PUBLISH_OPTIONS}
-                                        value={String(formData.is_published)}
+                                    <TextField
+                                        type="text"
+                                        name="title"
+                                        value={formData.title}
                                         onChange={handleChange}
                                         required={true}
                                         disabled={formData.isLoading}
@@ -625,14 +583,113 @@ export default function Page() {
                                 </FormItem>
                                 <FormItem>
                                     <Label
-                                        htmlFor="is_free"
-                                        name="Free"
+                                        htmlFor="description"
+                                        name="Description"
+                                        required
+                                    />
+                                    <MarkdownEditor
+                                        dataColorMode={"light"}
+                                        mode={"edit"}
+                                        value={formData.description}
+                                        onChange={handleMarkdownChange}
+                                    />
+                                </FormItem>
+                                <FormItem>
+                                    <Label
+                                        htmlFor="level"
+                                        name="Level"
                                         required
                                     />
                                     <Select
-                                        name="is_free"
-                                        options={BOOLEAN_OPTIONS}
-                                        value={String(formData.is_free)}
+                                        name="level"
+                                        options={LEVEL_OPTIONS}
+                                        value={formData.level}
+                                        onChange={handleChange}
+                                        disabled={formData.isLoading}
+                                        isLoading={formData.isLoading}
+                                        isError={formData.isError}
+                                        required={true}
+                                    />
+                                </FormItem>
+                                {formTitle === "edit" && (
+                                    <>
+                                        <FormSplit>
+                                            <FormItem>
+                                                <Label
+                                                    htmlFor="visibility"
+                                                    name="Visibility"
+                                                    required
+                                                />
+                                                <Select
+                                                    name="is_published"
+                                                    options={PUBLISH_OPTIONS}
+                                                    value={String(formData.is_published)}
+                                                    onChange={handleChange}
+                                                    required={true}
+                                                    disabled={formData.isLoading}
+                                                    isLoading={formData.isLoading}
+                                                    isError={formData.isError}
+                                                />
+                                            </FormItem>
+                                            <FormItem>
+                                                <Label
+                                                    htmlFor="is_free"
+                                                    name="Free"
+                                                    required
+                                                />
+                                                <Select
+                                                    name="is_free"
+                                                    options={BOOLEAN_OPTIONS}
+                                                    value={String(formData.is_free)}
+                                                    onChange={handleChange}
+                                                    required={true}
+                                                    disabled={formData.isLoading}
+                                                    isLoading={formData.isLoading}
+                                                    isError={formData.isError}
+                                                />
+                                            </FormItem>
+                                        </FormSplit>
+                                    </>
+                                )}
+                                <Button
+                                    type="submit"
+                                    name={formTitle === "create" ? "Create" : "Update"}
+                                    disabled={formData.isLoading}
+                                    isLoading={formData.isLoading}
+                                    fullWidth={true}
+                                    className="border-black bg-black text-white hover:bg-gray-800 hover:text-white"
+                                />
+                            </Form>
+                        </Modal>
+
+                        {/* Delete Confirmation Modal */}
+                        <Modal
+                            icon={<FaTrash className="w-6 h-6" />}
+                            isActive={modalConfirmDelete}
+                            title="Confirm Delete"
+                            closeModal={() => setModalConfirmDelete(false)}
+                            className="max-w-lg"
+                        >
+                            <Form onSubmit={handleDelete}>
+                                {formData.message && (
+                                    <FormMessage message={formData.message} isError={formData.isError} />
+                                )}
+                                <div>
+                                    <p className="text-sm font-medium text-gray-600">
+                                        Are you sure you want to delete this module?
+                                        Please type <span className="font-bold">DELETE MODULE</span> to confirm.
+                                    </p>
+                                </div>
+                                <FormItem>
+                                    <Label
+                                        htmlFor="confirm_datele"
+                                        name="Confirm Delete"
+                                        required
+                                    />
+                                    <TextField
+                                        type="text"
+                                        name="confirm_delete"
+                                        value={formData.confirm_delete}
                                         onChange={handleChange}
                                         required={true}
                                         disabled={formData.isLoading}
@@ -640,120 +697,75 @@ export default function Page() {
                                         isError={formData.isError}
                                     />
                                 </FormItem>
-                            </FormSplit>
-                        </>
-                    )}
-                    <Button
-                        type="submit"
-                        name={formTitle === "create" ? "Create" : "Update"}
-                        disabled={formData.isLoading}
-                        isLoading={formData.isLoading}
-                        fullWidth={true}
-                        className="border-black bg-black text-white hover:bg-gray-800 hover:text-white"
-                    />
-                </Form>
-            </Modal>
+                                <Button
+                                    type="submit"
+                                    name={"Delete"}
+                                    disabled={formData.isLoading}
+                                    isLoading={formData.isLoading}
+                                    fullWidth={true}
+                                    className="border-red-600 bg-red-600 text-white hover:bg-red-700 hover:border-red-700"
+                                />
+                            </Form>
+                        </Modal>
 
-            {/* Delete Confirmation Modal */}
-            <Modal
-                icon={<FaTrash className="w-6 h-6" />}
-                isActive={modalConfirmDelete}
-                title="Confirm Delete"
-                closeModal={() => setModalConfirmDelete(false)}
-                className="max-w-lg"
-            >
-                <Form onSubmit={handleDelete}>
-                    {formData.message && (
-                        <FormMessage message={formData.message} isError={formData.isError} />
-                    )}
-                    <div>
-                        <p className="text-sm font-medium text-gray-600">
-                            Are you sure you want to delete this module?
-                            Please type <span className="font-bold">DELETE MODULE</span> to confirm.
-                        </p>
-                    </div>
-                    <FormItem>
-                        <Label
-                            htmlFor="confirm_datele"
-                            name="Confirm Delete"
-                            required
-                        />
-                        <TextField
-                            type="text"
-                            name="confirm_delete"
-                            value={formData.confirm_delete}
-                            onChange={handleChange}
-                            required={true}
-                            disabled={formData.isLoading}
-                            isLoading={formData.isLoading}
-                            isError={formData.isError}
-                        />
-                    </FormItem>
-                    <Button
-                        type="submit"
-                        name={"Delete"}
-                        disabled={formData.isLoading}
-                        isLoading={formData.isLoading}
-                        fullWidth={true}
-                        className="border-red-600 bg-red-600 text-white hover:bg-red-700 hover:border-red-700"
-                    />
-                </Form>
-            </Modal>
-
-            {/* Restore Confirmation Modal */}
-            <Modal
-                icon={<MdOutlineRestore className="w-6 h-6" />}
-                isActive={modalConfirmRestore}
-                title="Restore Module"
-                closeModal={() => setModalConfirmRestore(false)}
-                className="max-w-lg"
-            >
-                <div className="mb-4 flex flex-col gap-4">
-                    {formData.message && (
-                        <FormMessage message={formData.message} isError={formData.isError} />
-                    )}
-                    <p className="text-sm font-medium text-gray-600">
-                        Are you sure you want to restore this module :
-                    </p>
-                    <table className="w-full">
-                        <tbody className="w-full">
-                            <tr className="w-full">
-                                <td className="border-y p-2">
-                                    <span className="font-medium capitalize">ID</span>
-                                </td>
-                                <td className="border-y p-2">
-                                    <span className="font-normal capitalize">{formData.module_id}</span>
-                                </td>
-                            </tr>
-                            <tr className="w-full">
-                                <td className="border-y p-2">
-                                    <span className="font-medium capitalize">Title</span>
-                                </td>
-                                <td className="border-y p-2">
-                                    <span className="font-normal capitalize">{formData.title}</span>
-                                </td>
-                            </tr>
-                            <tr className="w-full">
-                                <td className="border-y p-2">
-                                    <span className="font-medium capitalize">Level</span>
-                                </td>
-                                <td className="border-y p-2">
-                                    <span className="font-normal capitalize">{formData.level}</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <Button
-                        type="button"
-                        name={"Restore"}
-                        onClick={(e: any) => handleRestore(e, formData.module_id)}
-                        disabled={formData.isLoading}
-                        isLoading={formData.isLoading}
-                        fullWidth={true}
-                        className="border-green-500 bg-green-500 text-white hover:bg-green-600 hover:border-green-600"
-                    />
-                </div>
-            </Modal>
+                        {/* Restore Confirmation Modal */}
+                        <Modal
+                            icon={<MdOutlineRestore className="w-6 h-6" />}
+                            isActive={modalConfirmRestore}
+                            title="Restore Module"
+                            closeModal={() => setModalConfirmRestore(false)}
+                            className="max-w-lg"
+                        >
+                            <div className="mb-4 flex flex-col gap-4">
+                                {formData.message && (
+                                    <FormMessage message={formData.message} isError={formData.isError} />
+                                )}
+                                <p className="text-sm font-medium text-gray-600">
+                                    Are you sure you want to restore this module :
+                                </p>
+                                <table className="w-full">
+                                    <tbody className="w-full">
+                                        <tr className="w-full">
+                                            <td className="border-y p-2">
+                                                <span className="font-medium capitalize">ID</span>
+                                            </td>
+                                            <td className="border-y p-2">
+                                                <span className="font-normal capitalize">{formData.module_id}</span>
+                                            </td>
+                                        </tr>
+                                        <tr className="w-full">
+                                            <td className="border-y p-2">
+                                                <span className="font-medium capitalize">Title</span>
+                                            </td>
+                                            <td className="border-y p-2">
+                                                <span className="font-normal capitalize">{formData.title}</span>
+                                            </td>
+                                        </tr>
+                                        <tr className="w-full">
+                                            <td className="border-y p-2">
+                                                <span className="font-medium capitalize">Level</span>
+                                            </td>
+                                            <td className="border-y p-2">
+                                                <span className="font-normal capitalize">{formData.level}</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <Button
+                                    type="button"
+                                    name={"Restore"}
+                                    onClick={(e: any) => handleRestore(e, formData.module_id)}
+                                    disabled={formData.isLoading}
+                                    isLoading={formData.isLoading}
+                                    fullWidth={true}
+                                    className="border-green-500 bg-green-500 text-white hover:bg-green-600 hover:border-green-600"
+                                />
+                            </div>
+                        </Modal>
+                    </>
+                )
+                : <Unauthorized />
+            }
         </>
     )
 }
