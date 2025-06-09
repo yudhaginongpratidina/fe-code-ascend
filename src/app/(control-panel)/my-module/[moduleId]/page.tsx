@@ -493,6 +493,7 @@ export default function Page() {
                                                         {!chapter.is_deleted ? (
                                                             <>
                                                                 <IconButton
+                                                                    id="edit"
                                                                     icon={<FaEdit className="w-4 h-4 text-orange-600" />}
                                                                     onClick={() => handleOpenModal("edit", chapter.id)}
                                                                     className="text-blue-600 hover:text-blue-800 bg-blue-100 hover:bg-blue-200 p-2 rounded-full transition duration-200"
@@ -500,6 +501,7 @@ export default function Page() {
                                                                     type="button"
                                                                 />
                                                                 <IconButton
+                                                                    id="delete"
                                                                     icon={<FaTrash className="w-4 h-4 text-red-600" />}
                                                                     onClick={() => handleModalConfirmDelete(chapter.id)}
                                                                     className="text-red-600 hover:text-red-800 bg-red-100 hover:bg-red-200 p-2 rounded-full transition duration-200"
@@ -509,6 +511,7 @@ export default function Page() {
                                                             </>
                                                         ) : (
                                                             <IconButton
+                                                                id="restore"
                                                                 icon={<MdOutlineRestore className="w-4 h-4 text-green-600" />}
                                                                 onClick={() => handleModalConfirmRestore(chapter.id)}
                                                                 className="text-green-600 hover:text-green-800 bg-green-100 hover:bg-green-200 p-2 rounded-full transition duration-200"

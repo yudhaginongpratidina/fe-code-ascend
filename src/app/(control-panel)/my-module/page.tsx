@@ -484,6 +484,7 @@ export default function Page() {
                                                     <td className="min-w-[100px] p-2 text-center">
                                                         <div className="w-full flex justify-center items-center gap-2">
                                                             <IconButton
+                                                                id="chapters-module-button"
                                                                 icon={<FaList className="w-4 h-4" />}
                                                                 onClick={() => navigateToModuleDetails(module.id)}
                                                                 className="text-gray-500 hover:text-gray-700 transition duration-200"
@@ -493,6 +494,7 @@ export default function Page() {
                                                             {module.is_deleted === false && (
                                                                 <>
                                                                     <IconButton
+                                                                        id="edit-module-button"
                                                                         icon={<FaEdit className="w-4 h-4 text-orange-500" />}
                                                                         onClick={() => handleOpenModal("edit", module.id)}
                                                                         className="text-gray-500 hover:text-gray-700 transition duration-200"
@@ -500,6 +502,7 @@ export default function Page() {
                                                                         type="button"
                                                                     />
                                                                     <IconButton
+                                                                        id="users-progress-module-button"
                                                                         icon={<FaUsers className="w-4 h-4 text-blue-500" />}
                                                                         onClick={() => window.location.href = `/my-module/users/${module.id}`}
                                                                         className="text-gray-500 hover:text-gray-700 transition duration-200"
@@ -510,6 +513,7 @@ export default function Page() {
                                                             )}
                                                             {module.is_deleted === false && (
                                                                 <IconButton
+                                                                    id="delete-module-button"
                                                                     icon={<FaTrash className="w-4 h-4 text-red-500" />}
                                                                     onClick={() => handleModalConfirmDelete(module.id)}
                                                                     className={`${module.is_deleted ? 'text-gray-400 cursor-not-allowed' : 'text-gray-500 hover:text-gray-700'} transition duration-200`}
@@ -519,6 +523,7 @@ export default function Page() {
                                                             )}
                                                             {module.is_deleted === true && (
                                                                 <IconButton
+                                                                    id="restore-module-button"
                                                                     icon={<MdOutlineRestore className="w-4 h-4 text-green-500" />}
                                                                     onClick={() => handleRestoreModal(module.id)}
                                                                     aria-label="Restore module"

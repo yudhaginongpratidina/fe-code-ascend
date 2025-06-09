@@ -194,6 +194,7 @@ export default function Page() {
                                                 <td className="p-2 text-center">
                                                     {role === "superadmin" && (
                                                         <IconButton
+                                                            id="change-role"
                                                             icon={<FaEdit className="w-4 h-4" />}
                                                             onClick={() => {
                                                                 setFormData({ ...user });
