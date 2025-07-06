@@ -4,7 +4,7 @@ import { TbBadgesFilled } from "react-icons/tb";
 
 export default function LeverProgressCardDashboard({ currentUser }: { currentUser: any }) {
     return (
-        <div className="rounded-sm bg-white p-6 shadow-lg border border-gray-100 h-full">
+        <div className="h-fit rounded-sm bg-white p-6 shadow-lg border border-gray-100">
             <div className="flex items-center gap-2 mb-6">
                 <IoIosRocket className="text-purple-500 text-xl" />
                 <h3 className="text-xl font-bold text-gray-800">Your Info</h3>

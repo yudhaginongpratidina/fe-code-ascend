@@ -135,7 +135,6 @@ const MarkdownContentChoiceQuestion: React.FC<MarkdownContentProps> = ({ content
                     <div className="bg-gray-800 flex items-center justify-between px-4 py-2">
                         <div className="flex items-center gap-2">
                             <FaCode className="text-blue-400" />
-                            <span className="text-xs font-semibold text-gray-200 uppercase">{language}</span>
                         </div>
                         <button
                             onClick={() => copyToClipboard(children as string)}

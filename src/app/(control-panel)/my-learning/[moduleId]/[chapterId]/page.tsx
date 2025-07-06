@@ -69,7 +69,7 @@ export default function Page() {
             })
             const { data, message } = response.data;
             displayMessage(false, message);
-            console.log(data);
+            // console.log(data);
             setDataChapter(data);
             if (data?.with_question) {
                 const response = await api.post("/quiz-attempt/find", {

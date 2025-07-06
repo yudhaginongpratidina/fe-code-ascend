@@ -76,8 +76,10 @@ const MarkdownContent: React.FC<MarkdownContentProps> = ({ content }) => {
         ),
         code: ({ children, ...props }) => (
             <div className="relative">
-                <div className="bg-gray-800 text-white p-4 rounded">
-                    <code className="bg-gray-800 text-white p-4 rounded language-javascript">{children}</code>
+                <div className="bg-black text-white  rounded">
+                    <pre className="p-4 whitespace-pre-wrap overflow-x-auto">
+                        <code className="bg-black text-white">{children}</code>
+                    </pre>
                 </div>
                 <button
                     onClick={() => copyToClipboard(children as string)}
@@ -96,17 +98,63 @@ const MarkdownContent: React.FC<MarkdownContentProps> = ({ content }) => {
     };
 
     const copyToClipboard = (text: string) => {
-        navigator.clipboard.writeText(text).then(() => {
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000); // Reset copied status after 2 seconds
-        });
+        // Check if navigator.clipboard is available
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => {
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            }).catch((err) => {
+                console.error('Failed to copy text: ', err);
+                // Fallback method
+                fallbackCopyTextToClipboard(text);
+            });
+        } else {
+            // Fallback method for older browsers
+            fallbackCopyTextToClipboard(text);
+        }
+    };
+
+    const fallbackCopyTextToClipboard = (text: string) => {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        
+        // Avoid scrolling to bottom
+        textArea.style.top = "0";
+        textArea.style.left = "0";
+        textArea.style.position = "fixed";
+        textArea.style.opacity = "0";
+        
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) {
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            }
+        } catch (err) {
+            console.error('Fallback: Oops, unable to copy', err);
+        }
+        
+        document.body.removeChild(textArea);
     };
 
     return (
         <div className="overflow-auto">
-            <ReactMarkdown components={components} skipHtml={false}>
+            <ReactMarkdown components={components} skipHtml={true}>
                 {content}
             </ReactMarkdown>
+            <style jsx>{`
+                .animate-fade-in {
+                    animation: fadeIn 0.2s ease-in-out;
+                }
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(-10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+            `}</style>
         </div>
     );
 };
