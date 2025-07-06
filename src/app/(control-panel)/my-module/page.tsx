@@ -1,8 +1,8 @@
 "use client";
 
+import secureLocalStorage from "react-secure-storage";
 import { useState, useEffect } from "react";
 import api from "@/utils/api";
-import { getCookie } from "@/utils/cookie";
 
 import { Form, FormSplit, FormItem, FormMessage } from "@/components/ui/Form";
 import Label from "@/components/ui/Label";
@@ -12,7 +12,6 @@ import Button from "@/components/ui/Button";
 import IconButton from "@/components/ui/IconButton";
 import Modal from "@/components/ui/Modal";
 import MarkdownEditor from "@/components/ui/MarkdownEditor";
-import Unauthorized from "@/components/ui/Unauthorized";
 
 import { FaList, FaEdit, FaTrash, FaUsers } from "react-icons/fa";
 import { IoIosCreate } from "react-icons/io";
@@ -94,7 +93,7 @@ export default function Page() {
     const [formData, setFormData] = useState<FormDataType>(INITIAL_FORM_DATA);
 
     const get_role = () => {
-        const role: any = getCookie("role");
+        const role: any = secureLocalStorage.getItem("role");
         return role;
     }
 
@@ -775,7 +774,7 @@ export default function Page() {
                         </Modal>
                     </>
                 )
-                : <Unauthorized />
+                : ""
             }
         </>
     )

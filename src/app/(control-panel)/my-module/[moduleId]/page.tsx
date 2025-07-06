@@ -12,8 +12,6 @@ import IconButton from "@/components/ui/IconButton";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
 
-import Unauthorized from "@/components/ui/Unauthorized";
-
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { IoIosCreate } from "react-icons/io";
 import MarkdownEditor from "@/components/ui/MarkdownEditor";
@@ -800,7 +798,7 @@ export default function Page() {
                             </div>
                         </Modal>
                     </>)
-                : <Unauthorized />
+                : ""
             }
         </>
     )
