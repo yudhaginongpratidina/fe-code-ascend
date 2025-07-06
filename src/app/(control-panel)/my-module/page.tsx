@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import secureLocalStorage from "react-secure-storage";
 import api from "@/utils/api";
+import { getCookie } from "@/utils/cookie";
 
 import { Form, FormSplit, FormItem, FormMessage } from "@/components/ui/Form";
 import Label from "@/components/ui/Label";
@@ -93,9 +93,15 @@ export default function Page() {
     const [grouping, setGrouping] = useState<GroupingType>("all");
     const [formData, setFormData] = useState<FormDataType>(INITIAL_FORM_DATA);
 
+    const get_role = () => {
+        const role: any = getCookie("role");
+        return role;
+    }
+
     // Fetch modules on component mount
     useEffect(() => {
-        const role: any = secureLocalStorage.getItem("role");
+        const role = get_role();
+        console.log(role);
         setRole(role);
         fetchModules();
     }, []);

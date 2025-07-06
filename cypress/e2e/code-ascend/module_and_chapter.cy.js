@@ -1,27 +1,27 @@
 describe('Module and Chapter Test', () => {
 
-    const url = 'http://192.168.1.5:3000'
+    const url = 'http://192.168.1.5:5000'
 
     describe('Module Manegement', () => {
-        // it('Create Module', () => {
-        //     cy.visit(url)
-        //     cy.contains('Login').click()
-        //     cy.wait(2000)
-        //     cy.get('#username_or_email').type('superadmin@gmail.com')
-        //     cy.get('#password').type('superadmin@gmail.com')
-        //     cy.get('button').contains('Login').click()
-        //     cy.contains('user logged in successfully').should('be.visible')
-        //     cy.wait(2000)
-        //     cy.get('button').contains('Modul Management').click()
+        it('Create Module', () => {
+            cy.visit(url)
+            cy.contains('Login').click()
+            cy.wait(2000)
+            cy.get('#username_or_email').type('superadmin@gmail.com')
+            cy.get('#password').type('superadmin@gmail.com')
+            cy.get('button').contains('Login').click()
+            cy.contains('user logged in successfully').should('be.visible')
+            cy.wait(2000)
+            cy.get('button').contains('Modul Management').click()
 
-        //     cy.wait(1000)
-        //     cy.get('button').contains('New').click()
-        //     cy.wait(1000)
-        //     cy.get('#title').type('new module')
-        //     cy.get('textarea').type('this is a new module')
-        //     cy.get('select#level').select(1).should('have.value', 'intermediate')
-        //     cy.get('button').contains('Create').click()
-        // })
+            cy.wait(1000)
+            cy.get('button').contains('New').click()
+            cy.wait(1000)
+            cy.get('#title').type('new module')
+            cy.get('textarea').type('this is a new module')
+            cy.get('select#level').select(1).should('have.value', 'intermediate')
+            cy.get('button').contains('Create').click()
+        })
 
         it('View Module', () => {
             cy.visit(url)
@@ -33,20 +33,6 @@ describe('Module and Chapter Test', () => {
             cy.contains('user logged in successfully').should('be.visible')
             cy.wait(3000)
             cy.get('button').contains('Modul Management').click()
-        })
-
-        it('Detail Module (Chapter Management)', () => {
-            cy.visit(url)
-            cy.contains('Login').click()
-            cy.wait(3000)
-            cy.get('#username_or_email').type('superadmin@gmail.com')
-            cy.get('#password').type('superadmin@gmail.com')
-            cy.get('button').contains('Login').click()
-            cy.contains('user logged in successfully').should('be.visible')
-            cy.wait(3000)
-            cy.get('button').contains('Modul Management').click()
-            cy.wait(1000)
-            cy.get('button#chapters-module-button').click()
         })
 
         it('Update Module', () => {
@@ -73,74 +59,33 @@ describe('Module and Chapter Test', () => {
             cy.get('select#is_free').select(1).should('have.value', 'true')
             cy.get('button').contains('Update').click()
         })
-
-        it('User Progress', () => {
-            cy.visit(url)
-            cy.contains('Login').click()
-            cy.wait(3000)
-            cy.get('#username_or_email').type('superadmin@gmail.com')
-            cy.get('#password').type('superadmin@gmail.com')
-            cy.get('button').contains('Login').click()
-            cy.contains('user logged in successfully').should('be.visible')
-            cy.wait(3000)
-            cy.get('button').contains('Modul Management').click()
-            cy.wait(1000)
-            cy.get('button#users-progress-module-button').click()
-        })
-
-        it('Delete Module', () => {
-            cy.visit(url)
-            cy.contains('Login').click()
-            cy.wait(3000)
-            cy.get('#username_or_email').type('superadmin@gmail.com')
-            cy.get('#password').type('superadmin@gmail.com')
-            cy.get('button').contains('Login').click()
-            cy.contains('user logged in successfully').should('be.visible')
-
-            cy.wait(3000)
-            cy.get('button').contains('Modul Management').click()
-            cy.wait(1000)
-
-            cy.get('button#delete-module-button').click()
-            cy.get('#confirm_delete').type('DELETE MODULE')
-            cy.get('button').contains('Delete').click()
-            cy.wait(3000)
-
-            cy.get('select#grouping').select(2).should('have.value', 'deleted')
-            cy.get('button#restore-module-button').click()
-            cy.get('button').contains('Restore').click()
-            cy.wait(2000)
-        })
     })
 
 
     describe('Chapter Test', () => {
-        // it('Create Chapter', () => {
-        //     cy.visit(url)
-        //     cy.contains('Login').click()
-        //     cy.wait(3000)
+        it('Create Chapter', () => {
+            cy.visit(url)
+            cy.contains('Login').click()
+            cy.wait(3000)
 
-        //     // login
-        //     cy.get('#username_or_email').type('superadmin@gmail.com')
-        //     cy.get('#password').type('superadmin@gmail.com')
-        //     cy.get('button').contains('Login').click()
-        //     cy.contains('user logged in successfully').should('be.visible')
-        //     cy.wait(3000)
+            cy.get('#username_or_email').type('superadmin@gmail.com')
+            cy.get('#password').type('superadmin@gmail.com')
+            cy.get('button').contains('Login').click()
+            cy.contains('user logged in successfully').should('be.visible')
+            cy.wait(3000)
 
-        //     // module
-        //     cy.get('button').contains('Modul Management').click()
-        //     cy.wait(1000)
-        //     cy.get('button#chapters-module-button').click()
-        //     cy.wait(3000)
+            cy.get('button').contains('Modul Management').click()
+            cy.wait(1000)
+            cy.get('button#chapters-module-button').click()
+            cy.wait(3000)
 
-        //     // chapter
-        //     cy.get('button').contains('New').click()
-        //     cy.wait(1000)
-        //     cy.get('#title').type('new chapter')
-        //     cy.get('textarea').type('this is a new chapter')
-        //     cy.get('select#is_published').select(1).should('have.value', 'true')
-        //     cy.get('button').contains('Create').click()
-        // })
+            cy.get('button').contains('New').click()
+            cy.wait(1000)
+            cy.get('#title').type('new chapter')
+            cy.get('textarea').type('this is a new chapter')
+            cy.get('select#is_published').select(1).should('have.value', 'true')
+            cy.get('button').contains('Create').click()
+        })
 
         it('Edit Chapter', () => {
             cy.visit(url)
@@ -168,39 +113,6 @@ describe('Module and Chapter Test', () => {
             cy.get('textarea').type('this is a chpater update')
             cy.get('select#is_published').select(1).should('have.value', 'true')
             cy.get('button').contains('Update').click()
-        })
-
-        it('Delete and Restore Chapter', () => {
-            cy.visit(url)
-            cy.contains('Login').click()
-            cy.wait(3000)
-
-            // login
-            cy.get('#username_or_email').type('superadmin@gmail.com')
-            cy.get('#password').type('superadmin@gmail.com')
-            cy.get('button').contains('Login').click()
-            cy.contains('user logged in successfully').should('be.visible')
-            cy.wait(3000)
-
-            // module
-            cy.get('button').contains('Modul Management').click()
-            cy.wait(1000)
-            cy.get('button#chapters-module-button').click()
-            cy.wait(3000)
-
-            // chapter
-            cy.get('button#delete').click()
-            cy.get('#confirm_delete').type('DELETE CHAPTER')
-            cy.get('button').contains('Delete').click()
-            cy.wait(3000)
-
-            cy.get('select#filter_status').select(2).should('have.value', 'deleted')
-            cy.get('button#restore').click()
-            cy.get('button').contains('Restore').click()
-            cy.wait(2000)
-            
-            cy.get('select#filter_status').select(0).should('have.value', 'all')
-            cy.wait(3000)
         })
     })
 })

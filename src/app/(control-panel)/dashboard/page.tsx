@@ -1,11 +1,12 @@
 "use client";
+import { useState, useEffect } from "react";
+import api from '@/utils/api';
+
 import StatCardDashboard from "@/components/features/dashboard/StatCardDashboard";
 import LeaderboardDashboard from "@/components/features/dashboard/LeaderboardDashboard";
 import LeverProgressCardDashboard from "@/components/features/dashboard/LeverProgressCardDashboard";
 
-import { useState, useEffect } from "react";
-import api from '@/utils/api';
-import { FaUsers, FaBook, FaGraduationCap, FaTrophy } from "react-icons/fa";
+import { FaUsers, FaBook, FaGraduationCap } from "react-icons/fa";
 import MenuDashboard from "@/components/features/dashboard/MenuDashboard";
 
 type Profile = {
@@ -36,6 +37,7 @@ export default function Page() {
     const [myrank, setMyRank] = useState<number>(0);
     const [profileData, setProfileData] = useState<Profile | null>(null);
     const [leaderboardData, setLeaderboardData] = useState<LeaderboardData[]>([]);
+
 
     useEffect(() => {
         const fetchDashboardData = async () => {
@@ -166,7 +168,7 @@ export default function Page() {
                 </div>
             )}
 
-            <MenuDashboard/>
+            <MenuDashboard />
 
             {statCardsConfig.count === 1 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">

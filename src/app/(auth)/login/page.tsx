@@ -1,9 +1,8 @@
 "use client"
 
+import secureLocalStorage from "react-secure-storage";
 import { useState } from "react"
 import api from "@/utils/api";
-import { setStorageAuthenticated } from "@/utils/secure-storage-authenticated";
-import secureLocalStorage from "react-secure-storage";
 import { jwtDecode } from "jwt-decode";
 
 import { Form, FormItem, FormMessage, FormTextLinkAlternative } from "@/components/ui/Form"
@@ -41,24 +40,23 @@ export default function Page() {
                     email: username_or_email,
                     password: password,
                 });
-                const { data, message } = response.data
-                setStorageAuthenticated(data.token);
+                const { token, message } = response.data;
+                const decodedToken: any = jwtDecode(token);
+                secureLocalStorage.setItem("token", token);
+                secureLocalStorage.setItem("role", decodedToken.role);
                 setFormData({ ...formData, isLoading: false, isError: false, message: message });
-                const decode: any = jwtDecode(data.token);
-                secureLocalStorage.setItem("role", decode.role);
             } else {
                 const response = await api.post("/auth/login", {
                     type: "login_with_username",
                     username: username_or_email,
                     password: password,
                 });
-                const { data, message } = response.data
-                setStorageAuthenticated(data.token);
+                const { token, message } = response.data
+                const decodedToken: any = jwtDecode(token);
+                secureLocalStorage.setItem("token", token);
+                secureLocalStorage.setItem("role", decodedToken.role);
                 setFormData({ ...formData, isLoading: false, isError: false, message: message });
-                const decode: any = jwtDecode(data.token);
-                secureLocalStorage.setItem("role", decode.role);
             }
-
             setTimeout(() => window.location.href = "/dashboard", 3000);
         } catch (error: any) {
             const errorMessage = error?.response?.data?.message || error?.response?.data[0]?.message || error?.response?.data?.data[0].message || "An error occurred";

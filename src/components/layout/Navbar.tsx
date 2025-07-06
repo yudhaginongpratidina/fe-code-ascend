@@ -1,15 +1,16 @@
 "use client"
 import { useState, useEffect, useRef, useMemo } from "react";
+import secureLocalStorage from "react-secure-storage";
 import { usePathname } from "next/navigation";
+import { getCookie } from "@/utils/cookie";
 import Link from "next/link";
+import clsx from "clsx";
+import api from "@/utils/api";
 
 import { FaLaptopCode, FaUser, FaUserCircle } from "react-icons/fa";
-import { MdMenu } from "react-icons/md";
-import { removeStorageAuthenticated } from "@/utils/secure-storage-authenticated";
-import secureLocalStorage from "react-secure-storage";
-import clsx from "clsx";
 import { AiOutlineLoading } from "react-icons/ai";
 import { RxDashboard } from "react-icons/rx";
+import { MdMenu } from "react-icons/md";
 
 export default function Navbar() {
     const pathname = usePathname();
@@ -18,19 +19,23 @@ export default function Navbar() {
 
     const handleLogout = async () => {
         try {
-            await removeStorageAuthenticated();
-            secureLocalStorage.clear();
+            await api.get("/auth/logout"); 
+            secureLocalStorage.removeItem("token");
             window.location.href = "/login";
         } catch (error: any) {
             console.error(error?.response?.data?.message);
         }
     };
 
-    useEffect(() => {
-        const token = secureLocalStorage.getItem("access_token");
-        if (token) {
+    const get_authenticated_status = async () => {
+        const authenticated = await getCookie('authenticated');
+        if (authenticated) {
             setIsAuthenticated(true);
         }
+    }
+
+    useEffect(() => {
+        get_authenticated_status();
     }, []);
 
     return (
