@@ -1,7 +1,7 @@
 "use client";
 import api from '@/utils/api';
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Variants  } from 'framer-motion';
 import { FaTrophy, FaMedal, FaChevronUp, FaChevronDown, FaUser, FaFire, FaStar, FaCrown, FaGem, FaBolt, FaRocket, FaGamepad, FaShieldAlt } from 'react-icons/fa';
 
 type LeaderboardData = {
@@ -88,7 +88,7 @@ export default function ModernLeaderboard() {
         return colors[badge as keyof typeof colors] || 'text-gray-500';
     };
 
-    const podiumVariants = {
+    const podiumVariants : Variants = {
         hidden: { y: 100, opacity: 0 },
         visible: (i: number) => ({
             y: 0,
