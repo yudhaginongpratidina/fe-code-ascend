@@ -18,7 +18,7 @@ cd fe-code-ascend
 
 docker build \
   --build-arg NEXT_PUBLIC_ENVIRONMENT=development \
-  --build-arg NEXT_PUBLIC_API_BACKEND_URL=http://192.168.1.5:4000/api \
+  --build-arg NEXT_PUBLIC_API_BACKEND_URL=http://localhost:5000 \
   -t nextjs/fe-code-ascend:latest .
 
 docker run -p 5000:5000 nextjs/fe-code-ascend:latest
