@@ -16,14 +16,12 @@ pnpm run dev
 git clone https://github.com/yudhaginongpratidina/fe-code-ascend.git
 cd fe-code-ascend
 
-docker build -t nextjs/fe-code-ascend:latest .
-docker run -d \
-    --name fe-code-ascend \
-    -p 5000:5000 \
-    -e NEXT_PUBLIC_ENVIRONMENT=development \
-    -e NEXT_PUBLIC_API_BACKEND_URL=https://your-backend-domain.com/api \
-    --restart unless-stopped \
-    nextjs/fe-code-ascend:latest
+docker build \
+  --build-arg NEXT_PUBLIC_ENVIRONMENT=development \
+  --build-arg NEXT_PUBLIC_API_BACKEND_URL=http://192.168.1.5:4000/api \
+  -t nextjs/fe-code-ascend:latest .
+
+docker run -p 5000:5000 nextjs/fe-code-ascend:latest
 ```
 
 ## DOCKER HUB

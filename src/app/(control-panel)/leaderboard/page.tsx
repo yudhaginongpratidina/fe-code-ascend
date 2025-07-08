@@ -102,7 +102,7 @@ export default function ModernLeaderboard() {
         })
     };
 
-    const listItemVariants = {
+    const listItemVariants: Variants = {
         hidden: { x: -50, opacity: 0 },
         visible: (i: number) => ({
             x: 0,

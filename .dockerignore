@@ -1,5 +1,7 @@
 node_modules
 dist
+cypress/downloads
+cypress/fixtures
 
 .env
 .DS_Store
