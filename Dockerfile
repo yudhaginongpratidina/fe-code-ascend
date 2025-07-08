@@ -12,14 +12,6 @@ RUN pnpm install
 # 3) Copy seluruh source code setelah dependensi sudah diinstall
 COPY . .
 
-# Tambahkan build arguments untuk NEXT_PUBLIC_*
-ARG NEXT_PUBLIC_ENVIRONMENT
-ARG NEXT_PUBLIC_API_BACKEND_URL
-
-# (Opsional) buat ENV agar bisa digunakan di build-time script
-ENV NEXT_PUBLIC_ENVIRONMENT=$NEXT_PUBLIC_ENVIRONMENT
-ENV NEXT_PUBLIC_API_BACKEND_URL=$NEXT_PUBLIC_API_BACKEND_URL
-
 # 4) Build aplikasi
 RUN pnpm run build
 

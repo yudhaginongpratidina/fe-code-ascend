@@ -3,6 +3,5 @@ dist
 cypress/downloads
 cypress/fixtures
 
-.env
 .DS_Store
 *.log
