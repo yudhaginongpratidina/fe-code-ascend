@@ -3,12 +3,26 @@
 import secureLocalStorage from "react-secure-storage";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import api from "@/utils/api";
+
 import { FaUsers, FaBook, FaGraduationCap } from "react-icons/fa";
 import { useEffect, useState } from "react";
+import { FaUser } from "react-icons/fa6";
+import { IoLogOut } from "react-icons/io5";
 
 export default function MenuDashboard() {
     const router = useRouter();
     const [role, setRole] = useState<string | null>(null);
+
+    const handleLogout = async () => {
+        try {
+            await api.get("/auth/logout");
+            secureLocalStorage.removeItem("token");
+            window.location.href = "/login";
+        } catch (error: any) {
+            console.error(error?.response?.data?.message);
+        }
+    };
 
     useEffect(() => {
         const role: any = secureLocalStorage.getItem("role");
@@ -35,6 +49,7 @@ export default function MenuDashboard() {
                         <span className="text-sm font-medium text-center">Modul Management</span>
                     </motion.button>
                 )}
+
                 <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -44,6 +59,7 @@ export default function MenuDashboard() {
                     <FaGraduationCap size={26} className="mb-2 group-hover:scale-110 transition-transform" />
                     <span className="text-sm font-medium text-center">My Learning</span>
                 </motion.button>
+
 
                 {role === "superadmin" && (
                     <motion.button
@@ -56,6 +72,26 @@ export default function MenuDashboard() {
                         <span className="text-sm font-medium text-center">User Management</span>
                     </motion.button>
                 )}
+
+                <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => router.push("/my-profile")}
+                    className="flex flex-col items-center justify-center p-4 rounded-sm hover:cursor-pointer bg-gray-800 text-gray-100 hover:bg-gray-700 transition-all shadow group"
+                >
+                    <FaUser size={26} className="mb-2 group-hover:scale-110 transition-transform" />
+                    <span className="text-sm font-medium text-center">Profile</span>
+                </motion.button>
+
+                <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={handleLogout}
+                    className="flex flex-col items-center justify-center p-4 rounded-sm hover:cursor-pointer bg-rose-500 text-white hover:bg-rose-600 transition-all shadow group"
+                >
+                    <IoLogOut size={26} className="mb-2 group-hover:scale-110 transition-transform" />
+                    <span className="text-sm font-medium text-center">Logout</span>
+                </motion.button>
             </div>
         </motion.div>
     );
