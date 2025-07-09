@@ -42,6 +42,7 @@ export default function Page() {
                 });
                 const { token, message } = response.data;
                 const decodedToken: any = jwtDecode(token);
+                secureLocalStorage.setItem("is_login", true);
                 secureLocalStorage.setItem("token", token);
                 secureLocalStorage.setItem("role", decodedToken.role);
                 setFormData({ ...formData, isLoading: false, isError: false, message: message });
@@ -53,6 +54,7 @@ export default function Page() {
                 });
                 const { token, message } = response.data
                 const decodedToken: any = jwtDecode(token);
+                secureLocalStorage.setItem("is_login", true);
                 secureLocalStorage.setItem("token", token);
                 secureLocalStorage.setItem("role", decodedToken.role);
                 setFormData({ ...formData, isLoading: false, isError: false, message: message });

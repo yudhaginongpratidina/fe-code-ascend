@@ -15,6 +15,7 @@ import { MdMenu } from "react-icons/md";
 export default function Navbar() {
     const pathname = usePathname();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isLogin, setIsLogin] = useState(false);
     const [hamburgerRightIsAcitive, setHamburgerRightIsAcitive] = useState<boolean>(false);
 
     const handleLogout = async () => {
@@ -31,6 +32,11 @@ export default function Navbar() {
         const authenticated = await getCookie('authenticated');
         if (authenticated) {
             setIsAuthenticated(true);
+        }
+
+        const get_is_login = secureLocalStorage.getItem("is_login");
+        if (get_is_login) {
+            setIsLogin(true);
         }
     }
 
@@ -51,10 +57,10 @@ export default function Navbar() {
                     </NavbarItems>
                 )}
                 <NavbarItems>
-                    {isAuthenticated
+                    {isLogin
                         ? (
                             <>
-                                {isAuthenticated && (
+                                {isLogin && (
                                     <>
                                         <NavbarAvatar>
                                             <NavbarAvatarItem
