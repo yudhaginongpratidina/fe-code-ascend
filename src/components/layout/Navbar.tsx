@@ -2,7 +2,6 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import secureLocalStorage from "react-secure-storage";
 import { usePathname } from "next/navigation";
-import { getCookie } from "@/utils/cookie";
 import Link from "next/link";
 import clsx from "clsx";
 import api from "@/utils/api";
@@ -14,34 +13,24 @@ import { MdMenu } from "react-icons/md";
 
 export default function Navbar() {
     const pathname = usePathname();
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [isLogin, setIsLogin] = useState(false);
+    const [isLogin, setIsLogin] = useState<boolean>(false);
     const [hamburgerRightIsAcitive, setHamburgerRightIsAcitive] = useState<boolean>(false);
 
     const handleLogout = async () => {
         try {
-            await api.get("/auth/logout"); 
+            await api.get("/auth/logout");
             secureLocalStorage.removeItem("token");
+            secureLocalStorage.removeItem("role");
+            secureLocalStorage.removeItem("is_login");
             window.location.href = "/login";
         } catch (error: any) {
             console.error(error?.response?.data?.message);
         }
     };
 
-    const get_authenticated_status = async () => {
-        const authenticated = await getCookie('authenticated');
-        if (authenticated) {
-            setIsAuthenticated(true);
-        }
-
-        const get_is_login = secureLocalStorage.getItem("is_login");
-        if (get_is_login) {
-            setIsLogin(true);
-        }
-    }
-
     useEffect(() => {
-        get_authenticated_status();
+        const get_is_login: any = secureLocalStorage.getItem("is_login");
+        setIsLogin(get_is_login);
     }, []);
 
     return (
@@ -101,7 +90,6 @@ export default function Navbar() {
                 <div className="md:hidden w-full px-4 md:px-14 py-4 flex flex-col gap-2.5 shadow drop-shadow-sm bg-white">
                     <NavbarLink href="/home" name="Home" />
                     <NavbarLink href="/list-module" name="Module" />
-                    <NavbarLink href="/docs" name="Docs" />
                 </div>
             )}
         </nav>
